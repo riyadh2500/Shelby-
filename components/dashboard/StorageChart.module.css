@@ -1,0 +1,152 @@
+.section { padding: 0 0 1.75rem; }
+
+.sectionTitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 1rem;
+  letter-spacing: -0.01em;
+}
+
+.chartRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.panel {
+  background: var(--bg-card);
+  padding: 1.5rem;
+}
+
+.panelTitle {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.empty { color: var(--text-dim); font-size: 0.85rem; }
+
+/* Donut */
+.donutWrap { display: flex; align-items: center; gap: 1.75rem; flex-wrap: wrap; }
+
+.donutSvg { width: 180px; height: 180px; flex-shrink: 0; }
+
+.donutVal {
+  font-size: 13px;
+  font-weight: 700;
+  fill: var(--text);
+}
+.donutSub {
+  font-size: 9px;
+  fill: var(--text-muted);
+}
+
+/* Legend */
+.legend { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; flex: 1; min-width: 140px; }
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  cursor: default;
+  border-radius: 4px;
+  padding: 0.2rem 0.3rem;
+  transition: background 0.15s;
+}
+.legendItem:hover, .legendHov { background: var(--bg-card2); }
+
+.legendDot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+.legendLabel { color: var(--text-muted); flex: 1; }
+.legendCount { color: var(--text-dim); min-width: 50px; text-align: right; font-size: 0.72rem; }
+.legendBytes { color: var(--text); font-weight: 500; min-width: 70px; text-align: right; font-size: 0.72rem; }
+
+/* Bar chart */
+.barChartWrap { display: flex; flex-direction: column; height: 100%; }
+
+.barChartTitle {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  flex: 1;
+  height: 160px;
+}
+
+.barCol {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  position: relative;
+  cursor: default;
+}
+
+.barOuter {
+  width: 100%;
+  height: 130px;
+  display: flex;
+  align-items: flex-end;
+  background: rgba(255,255,255,0.02);
+  border-radius: 4px 4px 0 0;
+  overflow: hidden;
+}
+
+.barInner {
+  width: 100%;
+  background: linear-gradient(180deg, var(--pink), var(--pink-dim));
+  border-radius: 4px 4px 0 0;
+  transition: height 0.5s ease;
+  min-height: 2px;
+}
+
+.barCol:hover .barInner { background: linear-gradient(180deg, #ff99d6, var(--pink)); }
+
+.barLabel {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+/* Tooltip */
+.barTooltip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.65rem;
+  font-size: 0.72rem;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  white-space: nowrap;
+  z-index: 10;
+  pointer-events: none;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+
+@media (max-width: 768px) {
+  .chartRow { grid-template-columns: 1fr; }
+  .donutWrap { flex-direction: column; align-items: flex-start; }
+}

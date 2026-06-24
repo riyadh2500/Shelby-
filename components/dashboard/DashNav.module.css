@@ -1,0 +1,199 @@
+.sidebar {
+  width: 220px;
+  min-width: 220px;
+  background: var(--bg-card);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1.25rem 0.75rem;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: width 0.25s ease, min-width 0.25s ease;
+  z-index: 50;
+}
+
+.collapsed {
+  width: 56px;
+  min-width: 56px;
+  padding: 1.25rem 0.35rem;
+}
+
+/* Top row */
+.sidebarTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  min-height: 36px;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  overflow: hidden;
+}
+
+.brandLogo {
+  width: 72px;
+  color: var(--pink);
+  flex-shrink: 0;
+}
+
+.brandSub {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  padding-left: 1px;
+}
+
+.collapseBtn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  border-radius: var(--radius-sm);
+  width: 26px;
+  height: 26px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color 0.15s, color 0.15s;
+}
+.collapseBtn:hover { border-color: var(--text-muted); color: var(--text); }
+
+/* Upload button */
+.uploadBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  background: var(--pink);
+  color: #0a0a0a;
+  font-size: 0.82rem;
+  font-weight: 700;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  position: relative;
+  transition: opacity 0.2s;
+  margin-bottom: 0.5rem;
+}
+.uploadBtn:hover { opacity: 0.88; }
+.uploadIcon { font-style: normal; }
+
+.uploadBadge {
+  position: absolute;
+  top: -5px; right: -5px;
+  background: var(--red);
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 700;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Nav */
+.nav { display: flex; flex-direction: column; gap: 2px; }
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.navItem:hover { background: var(--bg-card2); color: var(--text); }
+.navActive {
+  background: var(--pink-glow);
+  border-color: var(--border-pink);
+  color: var(--pink);
+}
+
+.navIcon  { font-size: 1rem; flex-shrink: 0; }
+.navLabel { flex: 1; }
+
+.navBadge {
+  background: var(--red);
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 0.05rem 0.4rem;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* Divider */
+.divider { height: 1px; background: var(--border); margin: 0.5rem 0; }
+
+/* Storage widget */
+.storageWidget {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.85rem 0.75rem;
+  background: var(--bg-card2);
+  border-radius: var(--radius-sm);
+}
+
+.storageHeader {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+}
+.storageLabel { color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; }
+.storagePct   { color: var(--pink); font-weight: 700; }
+
+.storageBar {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.storageFill {
+  height: 100%;
+  background: var(--pink);
+  border-radius: 2px;
+  transition: width 0.5s;
+}
+
+.storageFiles { font-size: 0.68rem; color: var(--text-dim); }
+
+/* External links */
+.extLinks { display: flex; flex-direction: column; gap: 2px; margin-top: auto; padding-top: 0.5rem; }
+
+.extLink {
+  display: flex;
+  align-items: center;
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+.extLink:hover { color: var(--text-muted); background: var(--bg-card2); }
