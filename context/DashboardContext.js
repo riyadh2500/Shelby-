@@ -8,7 +8,7 @@ const DashboardContext = createContext(null);
 const TOTAL_CAPACITY_BYTES = 10 * 1024 * 1024 * 1024 * 1024; // 10 TiB
 const SP_COUNT = 16;
 const SP_CAPACITY_BYTES = 1 * 1024 * 1024 * 1024 * 1024; // 1 TiB each
-const STORAGE_KEY = "shelby_dashboard_files";
+const STORAGE_KEY = "shelby_dashboard_files_v2"; // v2 = cleared seed data
 const UPLOAD_STEPS = [
   "Encoding with Clay Codes…",
   "Splitting into chunksets…",
@@ -59,44 +59,9 @@ export function timeAgo(ts) {
   return `${Math.floor(diff / 86400)}d ago`;
 }
 
-// ── Generate seed files so the dashboard isn't empty on first load ─────────────
+// ── No seed files — dashboard starts empty ────────────────────────────────────
 function generateSeedFiles() {
-  const seeds = [
-    { name: "project-report.pdf",         size: 2_450_000  },
-    { name: "hero-banner.png",            size: 890_000    },
-    { name: "dataset-training.csv",       size: 45_000_000 },
-    { name: "app-bundle.tar.gz",          size: 12_300_000 },
-    { name: "smart-contract.sol",         size: 18_000     },
-    { name: "demo-video.mp4",             size: 230_000_000},
-    { name: "audit-report.pdf",           size: 1_200_000  },
-    { name: "logo-assets.zip",            size: 4_500_000  },
-    { name: "model-weights.bin",          size: 512_000_000},
-    { name: "whitepaper-draft.md",        size: 52_000     },
-    { name: "background-track.mp3",       size: 8_400_000  },
-    { name: "config.yaml",                size: 3_200      },
-    { name: "analytics-dashboard.json",   size: 620_000    },
-    { name: "nft-artwork.webp",           size: 1_800_000  },
-    { name: "test-suite.ts",              size: 34_000     },
-    { name: "backup-archive.zip",         size: 78_000_000 },
-    { name: "research-data.xlsx",         size: 3_700_000  },
-    { name: "promo-clip.webm",            size: 95_000_000 },
-  ];
-
-  const now = Date.now();
-  return seeds.map((s, i) => ({
-    id:        `seed-${i}`,
-    name:      s.name,
-    size:      s.size,
-    type:      getFileType(s.name),
-    status:    "stored",
-    spCount:   Math.floor(Math.random() * 4) + 10,
-    blobPath:  `0xf3a9…c12b/${s.name}`,
-    uploadedAt: now - (i + 1) * 4_200_000,
-    txHash:    `0x${Math.random().toString(16).slice(2, 18)}`,
-    // Seed files have no local File object — objectUrl is null
-    objectUrl: null,
-    shareUrl:  `shelby://shelbynet/0xf3a9c12b/${encodeURIComponent(s.name)}`,
-  }));
+  return [];
 }
 
 // ── Generate SP node data ──────────────────────────────────────────────────────
@@ -134,28 +99,31 @@ function buildDailyActivity(files) {
   return days;
 }
 
+// ── Payment history key ───────────────────────────────────────────────────────
+const PAYMENT_KEY = "shelby_payment_history";
+
 // ── Provider ───────────────────────────────────────────────────────────────────
 export const DashboardProvider = ({ children }) => {
   const [files, setFiles] = useState([]);
   const [sps,   setSps]   = useState([]);
-  const [uploadQueue,    setUploadQueue]    = useState([]);
-  const [showUploadModal, setShowUploadModal] = useState(false);
-  const [activeView,     setActiveView]     = useState("overview"); // overview | files | providers
-  const [searchQuery,    setSearchQuery]    = useState("");
-  const [typeFilter,     setTypeFilter]     = useState("all");
-  const [sortBy,         setSortBy]         = useState("uploadedAt");
-  const [sortDir,        setSortDir]        = useState("desc");
+  const [uploadQueue,      setUploadQueue]      = useState([]);
+  const [showUploadModal,  setShowUploadModal]  = useState(false);
+  const [activeView,       setActiveView]       = useState("overview");
+  const [searchQuery,      setSearchQuery]      = useState("");
+  const [typeFilter,       setTypeFilter]       = useState("all");
+  const [sortBy,           setSortBy]           = useState("uploadedAt");
+  const [sortDir,          setSortDir]          = useState("desc");
+  const [paymentHistory,   setPaymentHistory]   = useState([]); // ← payment log
   const spPingRef = useRef(null);
 
   // ── Hydrate from localStorage ────────────────────────────────────────────────
   useEffect(() => {
     let stored = null;
     try { stored = JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch {}
-    // Migrate old stored files that have a live shareUrl pointing to the dead API
     if (stored && stored.length > 0) {
       const migrated = stored.map((f) => ({
         ...f,
-        objectUrl: f.objectUrl || null, // ensure field exists
+        objectUrl: f.objectUrl || null,
         shareUrl:  f.shareUrl?.startsWith("https://api.shelbynet")
           ? `shelby://shelbynet/0xf3a9c12b/${encodeURIComponent(f.name)}`
           : (f.shareUrl || `shelby://shelbynet/0xf3a9c12b/${encodeURIComponent(f.name)}`),
@@ -164,6 +132,11 @@ export const DashboardProvider = ({ children }) => {
     } else {
       setFiles(generateSeedFiles());
     }
+    // Hydrate payment history
+    try {
+      const ph = JSON.parse(localStorage.getItem(PAYMENT_KEY));
+      if (Array.isArray(ph)) setPaymentHistory(ph);
+    } catch {}
     setSps(generateSPs());
   }, []);
 
@@ -228,8 +201,12 @@ export const DashboardProvider = ({ children }) => {
       return b.uploadedAt - a.uploadedAt;
     });
 
-  // ── Upload simulation ────────────────────────────────────────────────────────
-  const simulateUpload = useCallback((fileList) => {
+  // ── Upload simulation — guarded, called only when wallet is connected ─────
+  const simulateUpload = useCallback((fileList, walletAddress) => {
+    if (!walletAddress) {
+      console.warn("simulateUpload blocked: no wallet connected");
+      return;
+    }
     // Keep a ref to the real File objects so we can create object URLs after upload
     const fileObjects = Array.from(fileList);
 
@@ -262,13 +239,12 @@ export const DashboardProvider = ({ children }) => {
             type:      item.type,
             status:    "stored",
             spCount:   SP_COUNT,
-            blobPath:  `0xf3a9…c12b/${item.name}`,
+            blobPath:  `${walletAddress?.slice(0,10) ?? "0xf3a9…c12b"}/${item.name}`,
             uploadedAt: Date.now(),
             txHash:    `0x${Math.random().toString(16).slice(2, 18)}`,
-            // objectUrl is the real local preview URL — only valid this session
+            owner:     walletAddress ?? null,
             objectUrl,
-            // shareUrl kept for display/copy purposes only — not a live link
-            shareUrl:  `shelby://shelbynet/0xf3a9c12b/${encodeURIComponent(item.name)}`,
+            shareUrl:  `shelby://shelbynet/${walletAddress ?? "0xf3a9c12b"}/${encodeURIComponent(item.name)}`,
           };
           setFiles((prev) => [finalFile, ...prev]);
           setUploadQueue((q) => q.filter((u) => u.id !== item.id));
@@ -284,6 +260,16 @@ export const DashboardProvider = ({ children }) => {
         setTimeout(advance, 900 + Math.random() * 600);
       };
       setTimeout(advance, 600);
+    });
+  }, []);
+
+  // ── Record a completed payment ───────────────────────────────────────────────
+  const recordPayment = useCallback((entry) => {
+    // entry: { txHash, costAPT, costOctas, fileCount, totalBytes, owner, paidAt }
+    setPaymentHistory((prev) => {
+      const updated = [entry, ...prev].slice(0, 50); // keep last 50
+      try { localStorage.setItem(PAYMENT_KEY, JSON.stringify(updated)); } catch {}
+      return updated;
     });
   }, []);
 
@@ -315,6 +301,7 @@ export const DashboardProvider = ({ children }) => {
       typeFilter, setTypeFilter,
       sortBy, sortDir, toggleSort,
       simulateUpload, deleteFile,
+      paymentHistory, recordPayment,
       // derived
       usedBytes, usedPct, totalFiles,
       typeBreakdown, dailyActivity,

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useDashboard } from "../../context/DashboardContext";
+import { useAuth } from "../../context/AuthContext";
+import AuthButton from "./AuthButton";
 import styles from "./DashNav.module.css";
 
 const NAV_ITEMS = [
@@ -11,6 +13,7 @@ const NAV_ITEMS = [
 
 const DashNav = ({ onUploadClick }) => {
   const { activeView, setActiveView, totalFiles, usedPct, uploadQueue, sps } = useDashboard();
+  const { connected, displayName } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
   const healthySps = sps.filter((s) => s.status === "healthy").length;
 
@@ -41,8 +44,28 @@ const DashNav = ({ onUploadClick }) => {
         </button>
       </div>
 
-      {/* Upload button */}
-      <button className={styles.uploadBtn} onClick={onUploadClick} aria-label="Upload files">
+      {/* Google Sign-in button — always visible */}
+      <div className={styles.walletSection}>
+        <AuthButton collapsed={collapsed} />
+        {!collapsed && !connected && (
+          <p className={styles.walletHint}>Sign in to upload files</p>
+        )}
+        {!collapsed && connected && displayName && (
+          <p className={styles.walletConnected}>✓ Upload enabled</p>
+        )}
+      </div>
+
+      {/* Divider */}
+      <div className={styles.divider} />
+
+      {/* Upload button — only clickable when signed in */}
+      <button
+        className={`${styles.uploadBtn} ${!connected ? styles.uploadDisabled : ""}`}
+        onClick={connected ? onUploadClick : undefined}
+        aria-label={connected ? "Upload files" : "Sign in to upload"}
+        title={connected ? "Upload files" : "Sign in with Google first"}
+        disabled={!connected}
+      >
         <span className={styles.uploadIcon}>↑</span>
         {!collapsed && <span>Upload</span>}
         {!collapsed && uploadQueue.length > 0 && (

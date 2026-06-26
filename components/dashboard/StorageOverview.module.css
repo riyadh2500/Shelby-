@@ -178,3 +178,23 @@
 
 @media (max-width: 1024px) { .grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 600px)  { .grid { grid-template-columns: 1fr; } .value { font-size: 1.2rem; } }
+
+/* Wallet address in subtitle */
+.subAddr {
+  font-family: var(--mono);
+  font-weight: 600;
+  color: var(--green);
+}
+
+/* Disabled upload button when wallet not connected */
+.uploadBtnDisabled {
+  background: transparent !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text-muted) !important;
+  cursor: not-allowed !important;
+  opacity: 0.5;
+}
+.uploadBtnDisabled:hover {
+  transform: none !important;
+  opacity: 0.5 !important;
+}

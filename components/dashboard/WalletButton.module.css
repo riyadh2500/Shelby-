@@ -1,0 +1,263 @@
+.wrap {
+  position: relative;
+  width: 100%;
+}
+
+/* ── Connect button (disconnected) ── */
+.connectBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  background: transparent;
+  border: 1px solid var(--border-pink);
+  border-radius: var(--radius-sm);
+  color: var(--pink);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.connectBtn:hover:not(:disabled) {
+  background: var(--pink-glow);
+  border-color: var(--pink);
+}
+.connectBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+.connectBtn.collapsed { padding: 0.55rem; justify-content: center; }
+
+.walletIcon { font-size: 0.9rem; }
+
+/* Spinner */
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--border-pink);
+  border-top-color: var(--pink);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+/* ── Connected button ── */
+.connectedBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background: rgba(74,222,128,0.07);
+  border: 1px solid rgba(74,222,128,0.25);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.connectedBtn:hover { background: rgba(74,222,128,0.12); }
+.connectedBtn.collapsed { padding: 0.5rem; justify-content: center; }
+
+/* Green live dot */
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  flex-shrink: 0;
+  animation: pulse-pink 2s ease-in-out infinite;
+}
+
+.walletName {
+  font-weight: 600;
+  color: var(--green);
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.addr {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chevron {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  flex-shrink: 0;
+}
+
+/* ── Dropdown ── */
+.dropdown {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 -8px 32px rgba(0,0,0,0.5);
+  z-index: 200;
+  overflow: hidden;
+  animation: fade-in-up 0.15s ease both;
+  min-width: 200px;
+}
+
+.dropHeader {
+  padding: 0.75rem 1rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.dropWalletName {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--green);
+}
+
+.dropAddr {
+  font-size: 0.72rem;
+  font-family: var(--mono);
+  color: var(--text-muted);
+}
+
+.dropDivider {
+  height: 1px;
+  background: var(--border);
+  margin: 0.1rem 0;
+}
+
+.dropItem {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.6rem 1rem;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  transition: background 0.12s, color 0.12s;
+}
+.dropItem:hover { background: var(--bg-card); color: var(--text); }
+
+.dropDisconnect:hover { background: rgba(248,113,113,0.08); color: var(--red); }
+
+/* ── Wallet picker ── */
+.pickerTitle {
+  padding: 0.7rem 1rem 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+}
+
+.walletOption {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  padding: 0.65rem 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.walletOption:hover { background: var(--bg-card); }
+
+.walletOptionIcon {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.walletOptionIconFallback {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: var(--pink);
+  flex-shrink: 0;
+}
+
+.walletOptionName {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+  flex: 1;
+  text-align: left;
+}
+
+.walletOptionStatus { flex-shrink: 0; }
+
+.installed {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--green);
+  background: rgba(74,222,128,0.1);
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+}
+
+.getWallet {
+  font-size: 0.72rem;
+  color: var(--pink);
+  text-decoration: none;
+}
+.getWallet:hover { color: var(--pink-dim); }
+
+/* No wallets */
+.noWallets {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+.noWallets p { font-size: 0.78rem; color: var(--text-muted); }
+
+.getWalletLink {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--pink);
+  text-decoration: none;
+}
+.getWalletLink:hover { color: var(--pink-dim); }
+
+.connectError {
+  font-size: 0.68rem;
+  color: var(--red);
+  text-align: center;
+  padding: 0 0.25rem 0.25rem;
+  line-height: 1.4;
+}
+
+.connectHint {
+  font-size: 0.67rem;
+  color: var(--text-dim);
+  text-align: center;
+  margin-top: 0.2rem;
+  line-height: 1.4;
+}
+.connectHint a {
+  color: var(--pink);
+  text-decoration: none;
+}
+.connectHint a:hover { text-decoration: underline; }

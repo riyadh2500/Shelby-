@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDashboard, FILE_TYPES } from "../../context/DashboardContext";
+import { useAuth } from "../../context/AuthContext";
 import styles from "./FileManager.module.css";
 
 const FILE_ICONS = {
@@ -111,9 +112,32 @@ const FileManager = ({ onUploadClick }) => {
     deleteFile, formatBytes, timeAgo,
   } = useDashboard();
 
-  const [copiedId,       setCopiedId]       = useState(null);
-  const [confirmDelete,  setConfirmDelete]  = useState(null);
-  const [previewFile,    setPreviewFile]    = useState(null);
+  const { connected } = useAuth();
+
+  const [copiedId,      setCopiedId]      = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState(null);
+  const [previewFile,   setPreviewFile]   = useState(null);
+
+  // ── Wallet gate — hide files when not connected ───────────────────────────
+  if (!connected) {
+    return (
+      <section className={styles.section} id="files" aria-label="File manager">
+        <div className={styles.header}>
+          <div>
+            <h2 className={styles.title}>File Manager</h2>
+            <p className={styles.sub}>Connect your wallet to view and manage your files</p>
+          </div>
+        </div>
+        <div className={styles.walletGateBox}>
+          <span className={styles.walletGateIcon}>🔒</span>
+          <p className={styles.walletGateText}>Connect your Petra wallet to view your files</p>
+          <button className={styles.walletGateBtn} onClick={onUploadClick}>
+            ⬡ Connect Wallet
+          </button>
+        </div>
+      </section>
+    );
+  }
 
   const copyBlobPath = (f) => {
     const text = f.blobPath || f.name;

@@ -1,0 +1,168 @@
+.wrap { position: relative; width: 100%; }
+
+/* Wrapper — must be relative so dropdown anchors below */
+.wrap { position: relative; width: 100%; }
+
+/* Connect button */
+.signInBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  background: transparent;
+  border: 1px solid var(--border-pink);
+  border-radius: var(--radius-sm);
+  color: var(--pink);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.signInBtn:hover:not(:disabled) { background: var(--pink-glow); border-color: var(--pink); }
+.signInBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+.signInBtn.collapsed { padding: 0.55rem; }
+.walletIcon { font-size: 0.9rem; }
+
+.spinner {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border: 2px solid var(--border-pink);
+  border-top-color: var(--pink);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+/* Connected button */
+.signedBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background: rgba(74,222,128,0.07);
+  border: 1px solid rgba(74,222,128,0.25);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.signedBtn:hover { background: rgba(74,222,128,0.12); }
+.signedBtn.collapsed { padding: 0.5rem; justify-content: center; }
+
+.dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  flex-shrink: 0;
+  animation: pulse-pink 2s ease-in-out infinite;
+}
+
+.userName { font-weight: 600; color: var(--green); font-size: 0.75rem; flex-shrink: 0; }
+.addr { font-family: var(--mono); font-size: 0.72rem; color: var(--text-muted); flex: 1; overflow: hidden; text-overflow: ellipsis; }
+.chevron { font-size: 0.6rem; color: var(--text-dim); flex-shrink: 0; }
+
+/* Dropdown */
+.dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  bottom: auto;
+  left: 0; right: 0;
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  z-index: 200;
+  overflow: hidden;
+  animation: fade-in-up 0.15s ease both;
+  min-width: 200px;
+}
+
+.dropHeader { padding: 0.75rem 1rem 0.5rem; display: flex; flex-direction: column; gap: 0.15rem; }
+.dropName { font-size: 0.8rem; font-weight: 700; color: var(--green); }
+.dropEmail { font-size: 0.72rem; font-family: var(--mono); color: var(--text-muted); }
+.dropDivider { height: 1px; background: var(--border); margin: 0.1rem 0; }
+
+.dropItem {
+  display: flex; align-items: center; gap: 0.6rem;
+  width: 100%; padding: 0.6rem 1rem;
+  background: none; border: none;
+  color: var(--text-muted); font-size: 0.8rem;
+  cursor: pointer; text-align: left; text-decoration: none;
+  transition: background 0.12s, color 0.12s;
+}
+.dropItem:hover { background: var(--bg-card); color: var(--text); }
+.dropSignOut:hover { background: rgba(248,113,113,0.08); color: var(--red); }
+
+.authError { font-size: 0.68rem; color: var(--red); text-align: center; padding: 0 0.25rem 0.25rem; line-height: 1.4; }
+.authHint  { font-size: 0.67rem; color: var(--text-dim); text-align: center; margin-top: 0.2rem; }
+
+/* ── Wallet picker dropdown ── */
+.pickerDropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0; right: 0;
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  z-index: 300;
+  overflow: hidden;
+  min-width: 220px;
+  animation: fade-in-up 0.15s ease both;
+}
+
+.pickerTitle {
+  padding: 0.65rem 1rem 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+}
+
+.walletRow {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.12s;
+  cursor: pointer;
+}
+.walletRow:last-child { border-bottom: none; }
+.walletRow:hover { background: var(--bg-card); }
+
+.walletRowInner { display: flex; align-items: center; gap: 0.6rem; flex: 1; }
+
+.walletIcon2 { width: 24px !important; height: 24px !important; border-radius: 6px; flex-shrink: 0; }
+.walletName2 { font-size: 0.85rem !important; font-weight: 600; color: var(--text) !important; }
+
+.walletConnectBtn {
+  padding: 0.3rem 0.85rem !important;
+  background: var(--pink-glow) !important;
+  border: 1px solid var(--border-pink) !important;
+  border-radius: var(--radius-sm) !important;
+  color: var(--pink) !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: background 0.15s !important;
+  white-space: nowrap;
+}
+.walletConnectBtn:hover { background: rgba(255,119,201,0.22) !important; }
+
+.noWallet {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 0.5rem; padding: 1.25rem; text-align: center;
+}
+.noWallet p { font-size: 0.8rem; color: var(--text-muted); }
+.getWallet { font-size: 0.8rem; font-weight: 600; color: var(--pink); text-decoration: none; }
+.getWallet:hover { color: var(--pink-dim); }

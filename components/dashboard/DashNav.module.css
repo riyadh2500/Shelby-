@@ -197,3 +197,35 @@
   white-space: nowrap;
 }
 .extLink:hover { color: var(--text-muted); background: var(--bg-card2); }
+
+/* ── Wallet section ── */
+.walletSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0 0 0.1rem;
+}
+
+.walletHint {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  text-align: center;
+  line-height: 1.4;
+}
+
+.walletConnected {
+  font-size: 0.68rem;
+  color: var(--green);
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Disabled upload button */
+.uploadDisabled {
+  opacity: 0.35;
+  cursor: not-allowed !important;
+  background: transparent !important;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+.uploadDisabled:hover { opacity: 0.35 !important; }
